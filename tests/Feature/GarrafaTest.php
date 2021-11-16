@@ -19,16 +19,17 @@ class GarrafaTest extends TestCase
         parent::setUp();
 
         $this->admin = User::create([
-            'name' => 'Admin',
+            'name'  => 'Admin',
             'email' => 'admin@cafe.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'admin' => true,
         ]);
 
         $this->admin->garrafa()->create([
-            'capacidade_total' => 1000,
-            'quantidade_atual' => 0,
+            'capacidade_total'  => 1000,
+            'quantidade_atual'  => 0,
             'capacidade_xicara' => 200,
             'limite_cafe' => 3,
         ]);
@@ -70,7 +71,7 @@ class GarrafaTest extends TestCase
         $response->assertRedirect('/home');
 
         $garrafa = $this->admin->garrafa()->first();
-        $quantidadeAtual = $garrafa->quantidade_atual;
+        $quantidadeAtual  = $garrafa->quantidade_atual;
         $capacidadeXicara = $garrafa->capacidade_xicara;
 
         $this->assertEquals($quantidadeAtual, $xicarasParaEncher * $capacidadeXicara);
@@ -126,9 +127,9 @@ class GarrafaTest extends TestCase
         $xicarasParaEncher = random_int(6, 10);
 
         $garrafa = $this->admin->garrafa()->first();
-        $quantidadeAtual = $garrafa->quantidade_atual;
+        $quantidadeAtual   = $garrafa->quantidade_atual;
         $capacidadeGarrafa = $garrafa->capacidade_total;
-        $capacidadeXicara = $garrafa->capacidade_xicara;
+        $capacidadeXicara  = $garrafa->capacidade_xicara;
 
         $quantidadeMlQueVaiDerramar = ($xicarasParaEncher * $capacidadeXicara) - $capacidadeGarrafa;
         $xicarasQueIraoDerramar = $quantidadeMlQueVaiDerramar / $capacidadeXicara;
@@ -144,7 +145,7 @@ class GarrafaTest extends TestCase
         "Você derramou $xicarasQueIraoDerramar xícaras de café ($quantidadeMlQueVaiDerramar ml)");
 
         $garrafa = $this->admin->garrafa()->first();
-        $quantidadeAtual = $garrafa->quantidade_atual;
+        $quantidadeAtual   = $garrafa->quantidade_atual;
         $capacidadeGarrafa = $garrafa->capacidade_total;
 
         $this->assertEquals($quantidadeAtual, $capacidadeGarrafa);
@@ -161,7 +162,7 @@ class GarrafaTest extends TestCase
         $xicaras = random_int(1, 5);
 
         $garrafa = $this->admin->garrafa()->first();
-        $capacidadeXicara = $garrafa->capacidade_xicara;
+        $capacidadeXicara  = $garrafa->capacidade_xicara;
         $quantidadeInicial = $xicaras * $capacidadeXicara;
 
         $garrafa->update([
@@ -175,7 +176,7 @@ class GarrafaTest extends TestCase
         // Assert
         $response->assertRedirect('home');
 
-        $garrafa = $this->admin->garrafa()->first();
+        $garrafa             = $this->admin->garrafa()->first();
         $quantidadeAposBeber = $garrafa->quantidade_atual;
 
 
